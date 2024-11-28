@@ -1,4 +1,4 @@
-import { ServerDomain } from "@/app/(root)/(ono)/page";
+import { ServerDomain, ServerProdDomain } from "@/app/(root)/(ono)/page";
 import { FilterPaginationData } from "../common/filter-pagination-data";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";

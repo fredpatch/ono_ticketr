@@ -10,25 +10,18 @@ import InPageNavigation, {
 import Loader from "@/components/shared/Loader";
 import NoDataMessage from "@/components/shared/NoDataMessage";
 import React, { useEffect, useState } from "react";
-import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
-import { events } from "@/constant/events";
-import Image from "next/image";
-import { IconSignature } from "@tabler/icons-react";
 import MinimalEventPost from "@/components/shared/MinimalEventPost";
 import {
   eventsByCategory,
   latest_events,
   trending_events,
 } from "@/services/dataServices";
-import axios from "axios";
-import { FilterPaginationData } from "@/common/filter-pagination-data";
-import { Skeleton } from "@/components/ui/skeleton";
 import { LoadMoreDataBtn } from "@/components/shared/LoadMoreDataBtn";
-import CardDemo from "@/components/blocks/cards-demo-2";
 import EventPostCard from "@/components/shared/EventPostCard";
 import EventCard from "@/components/shared/EventCard";
 
 export const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
+export const ServerProdDomain = process.env.NEXT_PROD_API_URL as string;
 
 interface EventItem {
   event_id: string;
