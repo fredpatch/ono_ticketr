@@ -1,12 +1,10 @@
 "use client";
 
 import EventEditor from "@/components/shared/EventEditor";
-import Loader from "@/components/shared/Loader";
-import PublishForm from "@/components/shared/PublishForm";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import React, { createContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import EditorProvider from "@/context/EditorContext";
 
 const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
@@ -27,20 +25,6 @@ const eventStructure = {
   category: "", // String or ID for category
   draft: false, // Boolean for draft or published status
 };
-
-// Define an interface for the context value
-interface EditorContextType {
-  event: any; // Replace with your event structure type
-  setEvent: any;
-  editorState: string;
-  setEditorState: any;
-  textEditor: any;
-  setTextEditor: any;
-}
-
-export const EditorContext = createContext<EditorContextType | undefined>(
-  undefined
-);
 
 const EditorEvent = () => {
   const { userAuth } = useAuth();

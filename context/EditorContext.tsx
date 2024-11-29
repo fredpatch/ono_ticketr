@@ -38,9 +38,7 @@ interface EditorContextType {
   setTextEditor: any;
 }
 
-export const EditorContext = createContext<EditorContextType | undefined>(
-  undefined
-);
+const EditorContext = createContext<EditorContextType | undefined>(undefined);
 
 const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   const { userAuth } = useAuth();

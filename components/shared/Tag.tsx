@@ -1,7 +1,5 @@
-import { EditorContext } from "@/app/(root)/editor/page";
 import { useEditor } from "@/context/EditorContext";
 import { IconX } from "@tabler/icons-react";
-import { useContext } from "react";
 
 const Tag = ({ tag, tagIndex }: any) => {
   // const context = useContext(EditorContext);

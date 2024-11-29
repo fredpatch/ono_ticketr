@@ -6,7 +6,6 @@ import Link from "next/link";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import AnimationWrapper from "./AnimationWrapper";
 import { FileUploader } from "./FileUploader";
-import { EditorContext } from "@/app/(root)/editor/page";
 import EditorJS from "@editorjs/editorjs";
 import tools from "@/components/shared/Tools";
 import { useToast } from "@/hooks/use-toast";

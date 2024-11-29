@@ -2,11 +2,9 @@
 
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
-import React, { useContext, useState } from "react";
+import React from "react";
 import AnimationWrapper from "./AnimationWrapper";
-import { IconCross, IconX } from "@tabler/icons-react";
-import Image from "next/image";
-import { EditorContext } from "@/app/(root)/editor/page";
+import {  IconX } from "@tabler/icons-react";
 import { toast } from "@/hooks/use-toast";
 import Tag from "./Tag";
 import { Badge } from "../ui/badge";
@@ -15,9 +13,7 @@ import { Toggle } from "../ui/toggle";
 import { publish_event } from "@/services/dataServices";
 import { useAuth } from "@/context/AuthContext";
 import { useParams, useRouter } from "next/navigation";
-import { useUploadThing } from "@/lib/uploadthing";
-import { lookInSession } from "@/common/session";
-import { lookInLocal, removeFromLocal } from "@/common/localeStore";
+import {  removeFromLocal } from "@/common/localeStore";
 import { toast as publishToast } from "react-hot-toast";
 import { useEditor } from "@/context/EditorContext";
 
