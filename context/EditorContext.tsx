@@ -1,6 +1,5 @@
 "use client";
 
-import { ServerDomain } from "@/app/(root)/(ono)/page";
 import UpdateEventPage from "@/app/(root)/editor/[event_id]/page";
 import EventEditor from "@/components/shared/EventEditor";
 import Loader from "@/components/shared/Loader";
@@ -9,6 +8,8 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect } from "react";
+
+const  ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 export const eventStructure = {
   title: "",

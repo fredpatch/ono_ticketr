@@ -1,5 +1,6 @@
 import axios from "axios";
-import { ServerDomain } from "@/app/(root)/(ono)/page";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
 interface FilterPaginationDataProps {
   create_new_array?: any;
@@ -33,7 +34,7 @@ export const FilterPaginationData = async ({
     obj = { ...state, results: [...state.results, ...data], page: page };
   } else {
     await axios
-      .post(ServerDomain + countRoute, data_to_send, headers)
+      .post(API_URL + countRoute, data_to_send, headers)
       .then(({ data: { totalDocs } }) => {
         obj = {
           results: data,

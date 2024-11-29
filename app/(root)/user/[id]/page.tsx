@@ -15,9 +15,10 @@ import axios from "axios";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { ServerDomain } from "../../(ono)/page";
 import { FilterPaginationData } from "@/common/filter-pagination-data";
 import Image from "next/image";
+
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 export const profileDataStructure = {
   personal_info: {

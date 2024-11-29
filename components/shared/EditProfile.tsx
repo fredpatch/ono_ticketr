@@ -6,7 +6,6 @@ import { profileDataStructure } from "@/app/(root)/user/[id]/page";
 import { useAuth } from "@/context/AuthContext";
 import Loader from "./Loader";
 import axios from "axios";
-import { ServerDomain } from "@/app/(root)/(ono)/page";
 import { FileUploader } from "./FileUploader";
 import { toast } from "@/hooks/use-toast";
 import { StoreInLocal } from "@/common/localeStore";
@@ -23,6 +22,7 @@ import {
   IconWorld,
 } from "@tabler/icons-react";
 
+const  ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 let BIO_LIMIT = 150;
 export const LOCAL_SOCIAL_LINKS_KEY = "temp_social_links";
 

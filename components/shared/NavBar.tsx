@@ -18,8 +18,9 @@ import UserNavigationPanel from "./UserNavigationPanel";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
-import { ServerDomain } from "@/app/(root)/(ono)/page";
 import { logo1, logo2 } from "@/public/assets/logo";
+
+const  ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 const placeholders = [
   "Beach party",

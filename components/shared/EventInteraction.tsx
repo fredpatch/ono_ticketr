@@ -1,16 +1,14 @@
 "use client";
 
-import {
-  EventContext,
-  useEventContext,
-} from "@/app/(root)/events/[event_id]/page";
-import { ServerDomain } from "@/app/(root)/(ono)/page";
+import { useEventContext } from "@/app/(root)/events/[event_id]/page";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { IconBrandTwitter, IconHeart } from "@tabler/icons-react";
 import axios from "axios";
 import Link from "next/link";
 import React, { useContext, useEffect } from "react";
+
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 const EventInteraction = () => {
   // title,

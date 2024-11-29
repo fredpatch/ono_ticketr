@@ -20,9 +20,6 @@ import { LoadMoreDataBtn } from "@/components/shared/LoadMoreDataBtn";
 import EventPostCard from "@/components/shared/EventPostCard";
 import EventCard from "@/components/shared/EventCard";
 
-export const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
-export const ServerProdDomain = process.env.NEXT_PROD_API_URL as string;
-
 interface EventItem {
   event_id: string;
   title: string;

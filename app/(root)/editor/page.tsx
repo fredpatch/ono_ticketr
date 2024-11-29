@@ -7,8 +7,9 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import React, { createContext, useEffect } from "react";
-import { ServerDomain } from "../(ono)/page";
 import EditorProvider from "@/context/EditorContext";
+
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 export const eventStructure = {
   title: "",

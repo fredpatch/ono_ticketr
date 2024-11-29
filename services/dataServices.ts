@@ -1,8 +1,6 @@
-import { ServerDomain, ServerProdDomain } from "@/app/(root)/(ono)/page";
 import { FilterPaginationData } from "../common/filter-pagination-data";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
-import { set } from "date-fns/set";
 import { lookInLocal } from "@/common/localeStore";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
@@ -33,7 +31,7 @@ export const latest_events = async (
   setEvents: any
 ) => {
   await axios
-    .post(ServerDomain + `/events/latest-events`, {
+    .post(`${API_URL}/events/latest-events`, {
       page,
     })
     .then(async ({ data }) => {
@@ -53,7 +51,7 @@ export const latest_events = async (
 // TODO: Add fetchTrendingBlogs
 export const trending_events = async (setTrendingEvents: any) => {
   axios
-    .get(ServerDomain + "/events/trending-events")
+    .get(`${API_URL}/events/trending-events`)
     .then(({ data }) => {
       // console.log(data.events);
       setTrendingEvents(data.events);
@@ -71,7 +69,7 @@ export const eventsByCategory = async (
   setEvents: any
 ) => {
   axios
-    .post(ServerDomain + "/events/search-posts", {
+    .post(`${API_URL}/events/search-posts`, {
       tag: pageState,
       page,
     })
@@ -105,7 +103,7 @@ export const get_events = async ({
 }: any) => {
   await axios
     .post(
-      ServerDomain + "/events/user-written-events",
+      `${API_URL}/events/user-written-events`,
       {
         page,
         draft,
@@ -147,7 +145,7 @@ export const get_event = (
 ) => {
   axios
     .post(
-      ServerDomain + "/events/get-event",
+      `${API_URL}/events/get-event`,
       {
         event_id,
       },
@@ -162,7 +160,7 @@ export const get_event = (
       setEvent(event);
 
       axios
-        .post(ServerDomain + "/events/search-posts", {
+        .post(`${API_URL}/events/search-posts`, {
           tag: event.tags[0],
           limit: 6,
           eliminate_event: event_id,
@@ -187,13 +185,9 @@ export const delete_event = async (
 
   await axios
     .post(
-      ServerDomain + "/events/delete-event",
+      `${API_URL}/events/delete-event`,
       { event_id },
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
+      { headers: { Authorization: `Bearer ${access_token}` } }
     )
     .then(({ data }) => {
       target.removeAttribute("disabled");
@@ -234,7 +228,7 @@ export const delete_event = async (
 //   user_id = user_id == undefined ? events.user_id : user_id;
 
 //   axios
-//     .post(ServerDomain + "/events/search-posts", {
+//     .post(API_URL + "/events/search-posts", {
 //       author: user_id,
 //       page,
 //     })
@@ -262,7 +256,7 @@ export const delete_event = async (
 //   setEvents: any
 // ) => {
 //   axios
-//     .post(ServerDomain + "/user/get-profile", { username: profileId })
+//     .post(API_URL + "/user/get-profile", { username: profileId })
 //     .then(({ data: user }) => {
 //       // console.log("@@@ USER =>", user);
 //       if (user != null) {

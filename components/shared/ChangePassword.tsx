@@ -8,9 +8,9 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { toast as passwordChangeToast } from "react-hot-toast";
 import axios from "axios";
-import { ServerDomain } from "@/app/(root)/(ono)/page";
 
 const password_validation = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 const ChangePassword = () => {
   let { userAuth } = useAuth();

@@ -3,7 +3,6 @@
 import axios from "axios";
 import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
-import { ServerDomain } from "../../(ono)/page";
 import NoDataMessage from "@/components/shared/NoDataMessage";
 import AnimationWrapper from "@/components/shared/AnimationWrapper";
 import Loader from "@/components/shared/Loader";
@@ -12,7 +11,8 @@ import { FilterPaginationData } from "@/common/filter-pagination-data";
 import InPageNavigation from "@/components/shared/InpageNavigation";
 import { LoadMoreDataBtn } from "@/components/shared/LoadMoreDataBtn";
 import EventPostCard from "@/components/shared/EventPostCard";
-import { IconUser } from "@tabler/icons-react";
+
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 interface UserCardProps {
   user: [{ fullname: string; username: string; profile_img: string }];

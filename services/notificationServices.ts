@@ -1,8 +1,8 @@
-import { ServerDomain } from "@/app/(root)/(ono)/page";
 import { FilterPaginationData } from "../common/filter-pagination-data";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
-import { set } from "date-fns";
+
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 export const fetchNotifications = async ({
   filter,
