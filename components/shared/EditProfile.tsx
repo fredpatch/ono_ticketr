@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import AnimationWrapper from "./AnimationWrapper";
-import { profileDataStructure } from "@/app/(root)/user/[id]/page";
 import { useAuth } from "@/context/AuthContext";
 import Loader from "./Loader";
 import axios from "axios";
@@ -22,7 +21,30 @@ import {
   IconWorld,
 } from "@tabler/icons-react";
 
-const  ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
+const profileDataStructure = {
+  personal_info: {
+    fullname: "",
+    email: "",
+    username: "",
+    profile_img: "",
+    bio: "",
+  },
+  social_links: {
+    facebook: "",
+    twitter: "",
+    instagram: "",
+    youtube: "",
+    tiktok: "",
+    website: "",
+  },
+  account_info: {
+    total_events: 0,
+    total_reads: 0,
+  },
+  joinedAt: "",
+};
+
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 let BIO_LIMIT = 150;
 export const LOCAL_SOCIAL_LINKS_KEY = "temp_social_links";
 

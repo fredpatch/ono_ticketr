@@ -20,7 +20,7 @@ import Image from "next/image";
 
 const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
-export const profileDataStructure = {
+const profileDataStructure = {
   personal_info: {
     fullname: "",
     email: "",
