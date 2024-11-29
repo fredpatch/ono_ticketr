@@ -40,7 +40,7 @@ interface EditorContextType {
 
 const EditorContext = createContext<EditorContextType | undefined>(undefined);
 
-const EditorProvider = ({ children }: { children: React.ReactNode }) => {
+const EditorProvider = () => {
   const { userAuth } = useAuth();
   const access_token = userAuth?.access_token;
   const isAdmin = userAuth?.isAdmin;

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEventContext } from "@/app/(root)/events/[event_id]/page";
+
 import { useAuth } from "@/context/AuthContext";
+import { useEventContext } from "@/context/EventContext";
 import { toast } from "@/hooks/use-toast";
 import { IconBrandTwitter, IconHeart } from "@tabler/icons-react";
 import axios from "axios";

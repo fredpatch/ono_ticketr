@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export type SearchParamProps = {
   params: { event_id: string };
@@ -23,6 +17,7 @@ import EventInteraction from "@/components/shared/EventInteraction";
 import EventContent from "@/components/shared/EventContent";
 import EventPostCard from "@/components/shared/EventPostCard";
 import { useAuth } from "@/context/AuthContext";
+import EventContext from "@/context/EventContext";
 
 const eventStructureOno = {
   event_id: "",
@@ -57,13 +52,6 @@ const eventStructureOno = {
   publishedAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 };
-
-interface EventContextProps {
-  event: any;
-  setEvent: any;
-  isLikedByUser: any;
-  setIsLikedByUser: any;
-}
 
 // Define types for event structure
 interface EventAuthor {
@@ -107,8 +95,6 @@ interface EventStructure {
   publishedAt: string;
   updatedAt: string;
 }
-
-const EventContext = createContext<EventContextProps | null>(null);
 
 const EventPage = () => {
   const hasFetchedData = useRef(false);
