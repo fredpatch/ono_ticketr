@@ -108,7 +108,7 @@ interface EventStructure {
   updatedAt: string;
 }
 
-export const EventContext = createContext<EventContextProps | null>(null);
+const EventContext = createContext<EventContextProps | null>(null);
 
 const EventPage = () => {
   const hasFetchedData = useRef(false);
