@@ -249,12 +249,4 @@ const EventPage = () => {
   );
 };
 
-export const useEventContext = (): EventContextProps => {
-  const context = useContext(EventContext);
-  if (!context) {
-    throw new Error("useEvent must be used within an EventProvider");
-  }
-  return context;
-};
-
 export default EventPage;
