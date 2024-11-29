@@ -33,7 +33,7 @@ interface Events {
   totalDocs?: number;
 }
 
-export const eventStructureOno = {
+const eventStructureOno = {
   event_id: "",
   title: "",
   banner: "",

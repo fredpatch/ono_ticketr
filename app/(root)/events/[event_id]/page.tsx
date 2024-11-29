@@ -13,7 +13,6 @@ export type SearchParamProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-import { eventStructureOno } from "../../(ono)/page";
 import { get_event } from "@/services/dataServices";
 import { useParams } from "next/navigation";
 import AnimationWrapper from "@/components/shared/AnimationWrapper";
@@ -24,6 +23,40 @@ import EventInteraction from "@/components/shared/EventInteraction";
 import EventContent from "@/components/shared/EventContent";
 import EventPostCard from "@/components/shared/EventPostCard";
 import { useAuth } from "@/context/AuthContext";
+
+const eventStructureOno = {
+  event_id: "",
+  title: "",
+  banner: "",
+  description: "", // Short description with a max length, similar to `des`
+  content: [], // Content sections, an array for flexibility
+  tags: [],
+  author: {
+    personal_info: {
+      fullname: "",
+      email: "",
+      username: "",
+      profile_img: "",
+    },
+  },
+  activity: {
+    total_likes: 0,
+    total_comments: 0,
+    total_reads: 0,
+    total_parent_comments: 0,
+  },
+  comments: [], // Array to hold comment IDs or comment data
+  draft: false, // Boolean for draft or published status
+  location: "", // String for location details
+  startDateTime: new Date().toISOString(), // Default to current date
+  endDateTime: new Date().toISOString(), // Default to current date
+  price: 0,
+  isFree: true, // Boolean flag for free events
+  url: "", // External URL related to the event
+  category: "", // String or ID for category
+  publishedAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
 
 interface EventContextProps {
   event: any;
