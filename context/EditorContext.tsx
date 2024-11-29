@@ -9,9 +9,9 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect } from "react";
 
-const  ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
-export const eventStructure = {
+const eventStructure = {
   title: "",
   banner: "",
   description: "", // Short description with a max length, similar to `des`

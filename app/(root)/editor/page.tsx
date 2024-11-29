@@ -11,7 +11,7 @@ import EditorProvider from "@/context/EditorContext";
 
 const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
-export const eventStructure = {
+const eventStructure = {
   title: "",
   banner: "",
   description: "", // Short description with a max length, similar to `des`
