@@ -9,7 +9,7 @@ interface EventContextProps {
   setIsLikedByUser: any;
 }
 
-const EventContext = createContext<EventContextProps | null>(null);
+const EventContext = createContext<EventContextProps | undefined>(undefined);
 
 export const useEventContext = (): EventContextProps => {
   const context = useContext(EventContext);

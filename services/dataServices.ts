@@ -2,6 +2,7 @@ import { FilterPaginationData } from "../common/filter-pagination-data";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import { lookInLocal } from "@/common/localeStore";
+import useEventStore from "@/store/store";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
@@ -74,8 +75,6 @@ export const eventsByCategory = async (
       page,
     })
     .then(async ({ data }) => {
-      // console.log(data.blogs);
-
       let formattedData = await FilterPaginationData({
         state: events,
         data: data.events,

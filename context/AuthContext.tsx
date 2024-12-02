@@ -15,7 +15,7 @@ import { clearLocalSocialLinks } from "@/components/shared/EditProfile";
 import { toast } from "@/hooks/use-toast";
 
 interface AuthContextProps {
-  userAuth: AuthUser | null;
+  userAuth?: AuthUser | null;
   signup: (userData: SignUpParams) => Promise<void>;
   signin: (credentials: { email: string; password: string }) => Promise<void>;
   signout: () => void;
@@ -32,7 +32,7 @@ const defaultState: AuthUser = {
   new_notification_available: false,
 };
 
-export const AuthContext = createContext<AuthContextProps | null>(null);
+export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [userAuth, setUserAuth] = useState<AuthUser | null>(defaultState);

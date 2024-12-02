@@ -17,61 +17,15 @@ import {
   trending_events,
 } from "@/services/dataServices";
 import { LoadMoreDataBtn } from "@/components/shared/LoadMoreDataBtn";
-import EventPostCard from "@/components/shared/EventPostCard";
 import EventCard from "@/components/shared/EventCard";
-
-interface EventItem {
-  event_id: string;
-  title: string;
-  banner: string;
-  description: string;
-}
-
-interface Events {
-  results: EventItem[];
-  page: number;
-  totalDocs?: number;
-}
-
-const eventStructureOno = {
-  event_id: "",
-  title: "",
-  banner: "",
-  description: "", // Short description with a max length, similar to `des`
-  content: [], // Content sections, an array for flexibility
-  tags: [],
-  author: {
-    personal_info: {
-      fullname: "",
-      email: "",
-      username: "",
-      profile_img: "",
-    },
-  },
-  activity: {
-    total_likes: 0,
-    total_comments: 0,
-    total_reads: 0,
-    total_parent_comments: 0,
-  },
-  comments: [], // Array to hold comment IDs or comment data
-  draft: false, // Boolean for draft or published status
-  location: "", // String for location details
-  startDateTime: new Date().toISOString(), // Default to current date
-  endDateTime: new Date().toISOString(), // Default to current date
-  price: 0,
-  isFree: true, // Boolean flag for free events
-  url: "", // External URL related to the event
-  category: "", // String or ID for category
-  publishedAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
+import useEventStore from "@/store/store";
+import {
+  fetchEventsByCategory,
+  fetchLatestEvents,
+  fetchTrendingEvents,
+} from "@/hooks/zustand";
 
 const HomePage = () => {
-  const [events, setEvents] = useState<Events | null>(null); // null => it is supposed to be that
-  const [trendingEvents, setTrendingEvents] = useState<EventItem[] | null>(
-    null
-  ); // null => it is supposed to be that
   const [pageState, setPageState] = useState("homepage");
   let categories = [
     "Showcase",
@@ -82,48 +36,51 @@ const HomePage = () => {
     "SpotLight",
   ];
 
+  const { events, setEvents, trendingEvents, loading, setLoading } =
+    useEventStore();
+
   useEffect(() => {
     // set inPageIndex
     activeTabRef.current?.click();
 
+    setLoading(true);
     if (pageState == "homepage") {
-      latest_events({ page: 1 }, events, setEvents);
+      fetchLatestEvents({ page: 1 }).finally(() => setLoading(false));
     } else {
-      eventsByCategory({ page: 1 }, pageState, events, setEvents);
+      fetchEventsByCategory(pageState, { page: 1 }).finally(() =>
+        setLoading(false)
+      );
     }
 
     if (!trendingEvents) {
-      trending_events(setTrendingEvents);
+      fetchTrendingEvents();
     }
   }, [pageState]);
 
-  const loadEventByCategory = (e: any) => {
+  const loadEventByCategory = async (e: any) => {
     let category = e.target.innerText.toLowerCase();
 
     setEvents(null);
+    setLoading(true);
 
     if (pageState == category) {
       setPageState("homepage");
       return;
     }
+
     setPageState(category);
+    setLoading(false);
   };
 
-  const upcomingEvents = events?.results.filter((event: any) => {
-    return new Date(event.startDateTime) > new Date();
-  });
+  const upcomingEvents =
+    events?.results.filter((event: any) => {
+      return new Date(event.startDateTime) > new Date();
+    }) || [];
 
-  // const upcomingEvents = events?.results
-  //   .filter((event: any) => event.startDateTime > Date.now())
-  //   .sort((a: any, b: any) => a.startDateTime - b.startDateTime);
-
-  const pastEvents = events?.results.filter((event: any) => {
-    return new Date(event.startDateTime) < new Date();
-  });
-
-  // const pastEvents = events?.results
-  //   .filter((event: any) => event.startDateTime < Date.now())
-  //   .sort((a: any, b: any) => b.startDateTime - a.startDateTime);
+  const pastEvents =
+    events?.results.filter((event: any) => {
+      return new Date(event.startDateTime) < new Date();
+    }) || [];
 
   // console.log("@@@ Upcoming Events ==> ", upcomingEvents);
   // console.log("@@@ Past Events ==> ", pastEvents);
@@ -138,64 +95,77 @@ const HomePage = () => {
               routes={[pageState, "trending post"]}
               defaultHidden={["trending post"]}
             >
-              <>
-                {/* Upcoming event section */}
-                {upcomingEvents != null && upcomingEvents?.length > 0 ? (
-                  <>
-                    <h1 className="text-3xl font-semibold mt-10">
-                      Upcoming Events
-                    </h1>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-                      {upcomingEvents?.map((event: any, i: any) => {
-                        return (
-                          <AnimationWrapper
-                            keyValue={"event" + i}
-                            key={i}
-                            transition={{ duration: 1, delay: i * 0.1 }}
-                            className="mt-5"
-                          >
-                            {/* <EventPostCard event={event} /> */}
-                            <EventCard event={event} />
-                          </AnimationWrapper>
-                        );
-                      })}
-                    </div>
-                  </>
-                ) : (
-                  <NoDataMessage message="No new events found yet, comeback later !" />
-                )}
+              {/* Loading State */}
+              {loading ? (
+                <Loader />
+              ) : (
+                <>
+                  {/* Upcoming event section */}
+                  {upcomingEvents != null && upcomingEvents?.length > 0 ? (
+                    <>
+                      <h1 className="text-3xl font-semibold mt-10">
+                        Upcoming Events
+                      </h1>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+                        {upcomingEvents?.map((event: any, i: any) => {
+                          return (
+                            <AnimationWrapper
+                              keyValue={"event" + i}
+                              key={i}
+                              transition={{ duration: 1, delay: i * 0.1 }}
+                              className="mt-5"
+                            >
+                              {/* <EventPostCard event={event} /> */}
+                              <EventCard event={event} />
+                            </AnimationWrapper>
+                          );
+                        })}
+                      </div>
+                    </>
+                  ) : (
+                    <NoDataMessage
+                      message={
+                        pastEvents?.length > 0
+                          ? "No upcoming events at the moment. Check out past events below!"
+                          : "No events found yet. Please check back later!"
+                      }
+                    />
+                  )}
 
-                {/* Past events section */}
-                {pastEvents != null && pastEvents?.length > 0 && (
-                  <>
-                    <h1 className="text-3xl font-semibold mt-10">
-                      Past Events
-                    </h1>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-                      {pastEvents?.map((event: any, i: any) => {
-                        return (
-                          <AnimationWrapper
-                            keyValue={"event" + i}
-                            key={i}
-                            transition={{ duration: 1, delay: i * 0.1 }}
-                            className="mt-5"
-                          >
-                            {/* <EventPostCard event={event} /> */}
-                            <EventCard event={event} />
-                          </AnimationWrapper>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
+                  {/* Past events section */}
+                  {pastEvents != null && pastEvents?.length > 0 && (
+                    <>
+                      <h1 className="text-3xl font-semibold mt-10">
+                        Past Events
+                      </h1>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+                        {pastEvents?.map((event: any, i: any) => {
+                          return (
+                            <AnimationWrapper
+                              keyValue={"event" + i}
+                              key={i}
+                              transition={{ duration: 1, delay: i * 0.1 }}
+                              className="mt-5"
+                            >
+                              {/* <EventPostCard event={event} /> */}
+                              <EventCard event={event} />
+                            </AnimationWrapper>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
 
-                <LoadMoreDataBtn
-                  state={events}
-                  fetchDataFun={
-                    pageState === "homepage" ? latest_events : eventsByCategory
-                  }
-                />
-              </>
+                  <LoadMoreDataBtn
+                    state={events}
+                    fetchDataFun={
+                      pageState === "homepage"
+                        ? fetchLatestEvents
+                        : fetchEventsByCategory
+                    }
+                  />
+                </>
+              )}
 
               {trendingEvents == null ? (
                 <Loader />
@@ -229,7 +199,7 @@ const HomePage = () => {
                       <button
                         className={
                           "tag" +
-                          (pageState == category ? " bg-black text-white" : "")
+                          (pageState === category ? " bg-black text-white" : "")
                         }
                         key={i}
                         onClick={loadEventByCategory}
