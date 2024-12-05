@@ -1,5 +1,6 @@
 import getDay, { getFullDay } from "@/common/date";
 import { IconHeart } from "@tabler/icons-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const EventPostCard = ({ event, author }: any) => {
@@ -35,7 +36,9 @@ const EventPostCard = ({ event, author }: any) => {
     >
       <div className="w-full">
         <div className="flex gap-2 items-center mb-7">
-          <img
+          <Image
+            width={50}
+            height={50}
             src={profile_img}
             alt="profile"
             className="w-6 h-6 rounded-full"
@@ -64,7 +67,9 @@ const EventPostCard = ({ event, author }: any) => {
       </div>
 
       <div className="rounded-md h-28 aspect-square bg-transparent">
-        <img
+        <Image
+          width={300}
+          height={300}
           src={banner || "/assets/logo/1.png"}
           alt="banner_img"
           className="w-full h-full aspect-square object-cover rounded-sm"

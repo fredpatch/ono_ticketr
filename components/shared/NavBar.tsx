@@ -13,14 +13,19 @@ import {
   IconFilePencil,
   IconMoonStars,
   IconSearch,
+  IconSun,
 } from "@tabler/icons-react";
 import UserNavigationPanel from "./UserNavigationPanel";
-import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
-import { useAuth } from "@/context/AuthContext";
+// import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { logo1, logo2 } from "@/public/assets/logo";
+import { useTheme } from "@/context/ThemeContext";
+import { StoreInLocal } from "@/common/localeStore";
+// import { useAuth } from "@/context/AuthContextV2";
+import useAuthStore, { getAuthStore } from "@/store/store";
+import { useAuthV3 } from "@/app/api/AuthProviderV3";
 
-const  ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
+const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
 const placeholders = [
   "Beach party",
@@ -34,14 +39,11 @@ const NavBar = () => {
   const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
   const [userNavPanel, setUserNavPanel] = useState(false);
   const router = useRouter();
+  let { theme, toggleTheme } = useTheme();
 
-  const { userAuth, setUserAuth } = useAuth();
-  const isAdmin = userAuth?.isAdmin;
-  const access_token = userAuth?.access_token;
-  const profile_img = userAuth?.profile_img;
-  const new_notification_available = userAuth?.new_notification_available;
-
-  // console.log("new_notification_available", new_notification_available);
+  const { access_token, setAuth, user } = useAuthStore();
+  const profile_img = user?.profile_img;
+  const role = user?.role;
 
   const handleUserNavPanel = () => {
     setUserNavPanel((currentVal) => !currentVal);
@@ -59,77 +61,53 @@ const NavBar = () => {
       // router.replace(`/events/search-posts?query=${query}`);
       router.push(`/search-posts/${query}`);
     }
-
-    // console.log("query", query);
   };
 
-  useEffect(() => {
-    if (access_token) {
-      axios
-        .get(ServerDomain + "/notifications/new-notifications", {
-          headers: { Authorization: `Bearer ${access_token}` },
-        })
-        .then(({ data }) => {
-          setUserAuth({ ...userAuth, new_notification_available: data });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [access_token]);
+  // useEffect(() => {
+  //   if (access_token) {
+  //     axios
+  //       .get(ServerDomain + "/notifications/new-notifications", {
+  //         headers: { Authorization: `Bearer ${access_token}` },
+  //       })
+  //       .then(({ data }) => {
+  //         setUserAuth({ ...userAuth, new_notification_available: data });
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   }
+  // }, [access_token]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-  };
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("submitted");
+  const changeTheme = () => {
+    let newTheme = theme === "light" ? "dark" : "light";
+    toggleTheme();
+
+    document.body.setAttribute("data-theme", newTheme);
+    StoreInLocal("theme", newTheme);
   };
 
   return (
     <>
-      <nav className="navbar z-50">
+      <nav className="navbar z-50 bg-white dark:bg-zinc-800 transition-colors duration-200 ease-in-out">
         <Link href="/" className="flex-none">
-          <Image src={logo2} alt="logo" className="h-14 w-14 rounded-full" />
+          <Image
+            src={theme === "light" ? logo1 : logo2}
+            alt="logo"
+            className="h-14 w-14 rounded-full"
+          />
         </Link>
 
         {/* Search box */}
         <div
           className={
-            "absolute bg-white w-full left-0 top-full mt-0.! border-b border-gray-400/20 py-4 px-[5vw] md:border-0 md:block md:relative md:inset-0 md:p-0 md:w-auto md:show " +
+            "absolute bg-white dark:bg-zinc-800  w-full left-0 top-full mt-0.! border-b border-gray-400/20 py-4 px-[5vw] md:border-0 md:block md:relative md:inset-0 md:p-0 md:w-auto md:show " +
             (searchBoxVisibility ? "show" : "hide")
           }
         >
-          {/* <PlaceholdersAndVanishInput
-            placeholders={placeholders}
-            onChange={handleChange}
-            onSubmit={onSubmit}
-          /> */}
-          {/* <Input
-            type="text"
-            placeholder="Search..."
-            className="w-full md:w-auto bg-gray-200/40 p-4 pl-6 pr-[12%] md:pr-2 rounded-full placeholder:text-gray-700/50 md:pl-10"
-            onKeyDown={handleSearchFn}
-          /> */}
-          {/* <Form action="/events/search-posts">
-            <input
-              type="text"
-              name="query"
-              placeholder="Search for events..."
-              className="w-full py-3 px-4 pl-12 bg-white rounded-xl border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-            />
-
-            <button
-              type="submit"
-              className="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200"
-            >
-              Search
-            </button>
-          </Form> */}
           <input
             type="text"
             placeholder="Search..."
-            className="w-full md:w-auto bg-gray-200/40 p-4 pl-6 pr-[12%] md:pr-6 rounded-full placeholder:text-gray-700/50 md:pl-12"
+            className="w-full md:w-auto bg-gray-200/40 dark:bg-slate-200 p-4 pl-6 pr-[12%] md:pr-6 rounded-full dark:placeholder:text-zinc-800 placeholder:text-gray-700/50 md:pl-12"
             onKeyDown={handleSearchFn}
           />
 
@@ -147,35 +125,40 @@ const NavBar = () => {
           </button>
 
           {/* New post */}
-          {isAdmin && (
-            <Link
-              href="/editor"
-              className="hidden bg-gray-100 gap-2 md:flex link items-center rounded-md"
-            >
-              <IconFilePencil className="h-6 w-6" />
-              <p>New Post</p>
-            </Link>
-          )}
+          {role === "admin" ||
+            (role === "moderator" && (
+              <Link
+                href="/editor"
+                className="hidden bg-gray-100 gap-2 md:flex link items-center rounded-md"
+              >
+                <IconFilePencil className="h-6 w-6" />
+                <p>New Post</p>
+              </Link>
+            ))}
 
           {/* Theme toggle */}
           <button
-            // onClick={changeTheme}
-            className="relative w-12 h-12 rounded-full items-center justify-center flex bg-gray-100 hover:bg-black/10"
+            onClick={changeTheme}
+            className="relative w-12 h-12 rounded-full items-center justify-center flex bg-gray-100 dark:bg-zinc-300 dark:hover:bg-white hover:bg-black/10"
           >
-            <IconMoonStars className="h-6 w-6" />
+            {theme === "light" ? (
+              <IconMoonStars className="h-6 w-6 dark:text-zinc-800" />
+            ) : (
+              <IconSun className="h-6 w-6 dark:text-zinc-800" />
+            )}
           </button>
 
           {/* Notification */}
           {access_token ? (
             <>
-              {isAdmin && (
+              {role === "admin" && (
                 <Link href={"/dashboard/notifications"}>
                   <button className="relative w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 hover:bg-black/10">
                     <IconBell className="h-6 w-6" />
 
-                    {new_notification_available && (
-                      <span className="bg-red-500 w-3 h-3 rounded-full absolute top-3 right-3 z-10"></span>
-                    )}
+                    {/* {new_notification_available && (
+                        <span className="bg-red-500 w-3 h-3 rounded-full absolute top-3 right-3 z-10"></span>
+                      )} */}
                   </button>
                 </Link>
               )}
@@ -184,7 +167,7 @@ const NavBar = () => {
             ""
           )}
 
-          {access_token != null ? (
+          {access_token ? (
             <div
               className="relative"
               onClick={handleUserNavPanel}

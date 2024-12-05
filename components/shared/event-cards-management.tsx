@@ -40,7 +40,7 @@ export const ManagePublishedEventsCard = ({ event }: any) => {
   let [showStat, setShowStat] = useState(false);
   let { userAuth } = useAuth();
   let access_token = userAuth?.access_token;
-  let isAdmin = userAuth?.isAdmin;
+  let role = userAuth?.role;
 
   return (
     <>
@@ -65,32 +65,33 @@ export const ManagePublishedEventsCard = ({ event }: any) => {
             </p>
           </div>
 
-          {isAdmin && (
-            <>
-              <div className="flex gap-6 mt-3">
-                <Link
-                  href={`/editor/${event_id}`}
-                  className="underline pr-4 py-2 hover:text-purple-500"
-                >
-                  Edit
-                </Link>
-                <button
-                  className="lg:hidden pr-4 py-2 underline"
-                  onClick={() => setShowStat((prevVal: any) => !prevVal)}
-                >
-                  Stats
-                </button>
-                <button
-                  className="pr-4 py-2 text-red-600 underline hover:text-red-300"
-                  onClick={(e: any) =>
-                    deleteEvent(event, access_token, e.target)
-                  }
-                >
-                  Delete
-                </button>
-              </div>
-            </>
-          )}
+          {role === "admin" ||
+            (role === "moderator" && (
+              <>
+                <div className="flex gap-6 mt-3">
+                  <Link
+                    href={`/editor/${event_id}`}
+                    className="underline pr-4 py-2 hover:text-purple-500"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    className="lg:hidden pr-4 py-2 underline"
+                    onClick={() => setShowStat((prevVal: any) => !prevVal)}
+                  >
+                    Stats
+                  </button>
+                  <button
+                    className="pr-4 py-2 text-red-600 underline hover:text-red-300"
+                    onClick={(e: any) =>
+                      deleteEvent(event, access_token, e.target)
+                    }
+                  >
+                    Delete
+                  </button>
+                </div>
+              </>
+            ))}
         </div>
 
         <div className="max-lg:hidden">
@@ -112,7 +113,7 @@ export const ManageDraftEventCard = ({ event }: any) => {
 
   let { userAuth } = useAuth();
   let access_token = userAuth?.access_token;
-  let isAdmin = userAuth?.isAdmin;
+  let role = userAuth?.role;
 
   index++;
 
@@ -130,23 +131,24 @@ export const ManageDraftEventCard = ({ event }: any) => {
           </p>
 
           <div className="flex gap-6 mt-3">
-            {isAdmin && (
-              <>
-                <Link
-                  href={`/editor/${event_id}`}
-                  className="underline pr-4 py-2 hover:text-violet-500"
-                >
-                  Edit
-                </Link>
+            {role === "admin" ||
+              (role === "moderator" && (
+                <>
+                  <Link
+                    href={`/editor/${event_id}`}
+                    className="underline pr-4 py-2 hover:text-violet-500"
+                  >
+                    Edit
+                  </Link>
 
-                <button
-                  className="pr-4 py-2 text-red-600 hover:text-red-300 underline"
-                  onClick={(e) => deleteEvent(event, access_token, e.target)}
-                >
-                  Delete
-                </button>
-              </>
-            )}
+                  <button
+                    className="pr-4 py-2 text-red-600 hover:text-red-300 underline"
+                    onClick={(e) => deleteEvent(event, access_token, e.target)}
+                  >
+                    Delete
+                  </button>
+                </>
+              ))}
           </div>
         </div>
       </div>

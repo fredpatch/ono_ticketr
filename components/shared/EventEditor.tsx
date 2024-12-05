@@ -15,13 +15,11 @@ import { publish_event } from "@/services/dataServices";
 import { useParams, useRouter } from "next/navigation";
 import NotFound from "@/app/not-found";
 import { useEditor } from "@/context/EditorContext";
+import { useTheme } from "@/context/ThemeContext";
+import { logo1 } from "@/public/assets/logo";
 
 const EventEditor = () => {
-  // const context = useContext(EditorContext);
-  // // console.log("@@@ context", context);
-  // if (!context) {
-  //   throw new Error("EventEditor must be used within an EditorProvider");
-  // }
+  let { theme, toggleTheme } = useTheme();
 
   let { event, setEvent, setEditorState, setTextEditor } = useEditor();
 
@@ -43,7 +41,7 @@ const EventEditor = () => {
   const { userAuth } = useAuth();
   const router = useRouter();
   const access_token = userAuth?.access_token;
-  const isAdmin = userAuth?.isAdmin;
+  const role = userAuth?.role;
   const { event_id } = useParams();
   const [files, setFiles] = useState<File[]>([]);
 
@@ -216,59 +214,67 @@ const EventEditor = () => {
 
   return (
     <>
-      {isAdmin && (
-        <>
-          <nav className="navbar">
-            <Link href={"/"} className="flex-none w-15">
-              <Image src={logo} className="w-12" alt="logo" />
-            </Link>
-            <p className="max-md::hidden text-black line-clamp-1 w-full">
-              {title.length ? title : "New Event"}
-            </p>
+      {role === "admin" ||
+        (role === "moderator" && (
+          <>
+            <nav className="navbar">
+              <Link href={"/"} className="flex-none w-15">
+                <Image
+                  src={theme === "dark" ? logo1 : logo}
+                  className="w-12"
+                  alt="logo"
+                />
+              </Link>
+              <p className="max-md::hidden text-black line-clamp-1 w-full">
+                {title.length ? title : "New Event"}
+              </p>
 
-            <div className="flex gap-4 ml-auto">
-              <button className="btn-dark py-2" onClick={handlePublish}>
-                Publish
-              </button>
-              <button className="btn-light py-2" onClick={handleSaveDraftEvent}>
-                Save Draft
-              </button>
-            </div>
-          </nav>
-
-          <AnimationWrapper keyValue="text">
-            <section>
-              <div className="mx-auto max-w-[900px] w-full">
-                {/* TODO: Add banner upload */}
-                <div className="relative aspect-video hover:opacity-80 bg-white border-4 rounded-xl border-gray-200">
-                  <label htmlFor="uploadBanner">
-                    {/* <Image src={event.banner} className="z-20" alt="event_banner" /> */}
-                    <FileUploader
-                      endPoint="imageUploader"
-                      onFieldChange={handleFileChange}
-                      imageUrl={event.banner}
-                      setFiles={setFiles}
-                    />
-                  </label>
-                </div>
-
-                <textarea
-                  placeholder="Enter Event Title"
-                  onKeyDown={handleTitleKeyDown}
-                  onChange={handleTitleChange}
-                  className="text-4xl font-medium w-full h-20 outline-none resize-none mt-10 leading-tight placeholder:opacity-40 bg-white"
-                ></textarea>
-
-                <hr className="w-full opacity-10 my-5 text-gray-500" />
-
-                <div id="textEditor" className="font-gelasio" />
+              <div className="flex gap-4 ml-auto">
+                <button className="btn-dark py-2" onClick={handlePublish}>
+                  Publish
+                </button>
+                <button
+                  className="btn-light py-2"
+                  onClick={handleSaveDraftEvent}
+                >
+                  Save Draft
+                </button>
               </div>
-            </section>
-          </AnimationWrapper>
-        </>
-      )}
+            </nav>
 
-      {!isAdmin && <NotFound />}
+            <AnimationWrapper keyValue="text">
+              <section>
+                <div className="mx-auto max-w-[900px] w-full">
+                  {/* TODO: Add banner upload */}
+                  <div className="relative aspect-video hover:opacity-80 bg-white border-4 rounded-xl border-gray-200">
+                    <label htmlFor="uploadBanner">
+                      {/* <Image src={event.banner} className="z-20" alt="event_banner" /> */}
+                      <FileUploader
+                        endPoint="imageUploader"
+                        onFieldChange={handleFileChange}
+                        imageUrl={event.banner}
+                        setFiles={setFiles}
+                      />
+                    </label>
+                  </div>
+
+                  <textarea
+                    placeholder="Enter Event Title"
+                    onKeyDown={handleTitleKeyDown}
+                    onChange={handleTitleChange}
+                    className="text-4xl font-medium w-full h-20 outline-none resize-none mt-10 leading-tight placeholder:opacity-40 bg-white"
+                  ></textarea>
+
+                  <hr className="w-full opacity-10 my-5 text-gray-500" />
+
+                  <div id="textEditor" className="font-gelasio" />
+                </div>
+              </section>
+            </AnimationWrapper>
+          </>
+        ))}
+
+      {role !== "admin" && <NotFound />}
     </>
   );
 };

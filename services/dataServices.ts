@@ -2,7 +2,7 @@ import { FilterPaginationData } from "../common/filter-pagination-data";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import { lookInLocal } from "@/common/localeStore";
-import useEventStore from "@/store/store";
+// import useEventStore from "@/store/store";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 

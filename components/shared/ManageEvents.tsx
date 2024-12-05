@@ -14,6 +14,7 @@ import {
   ManageDraftEventCard,
   ManagePublishedEventsCard,
 } from "./event-cards-management";
+import { useEventStore } from "@/store/store";
 
 interface EventItem {
   event_id: string;
@@ -37,7 +38,8 @@ interface EventsDraft {
 }
 
 const ManageEvents = () => {
-  const [events, setEvents] = useState<Events | null>(null);
+  // const [events, setEvents] = useState<Events | null>(null);
+  const {events, setEvents} = useEventStore();
   const [drafts, setDrafts] = useState<EventsDraft | null>(null);
   const [query, setQuery] = useState("");
   const { userAuth } = useAuth();

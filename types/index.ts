@@ -16,8 +16,8 @@ export type AuthUser = {
   profile_img: string;
   username: string;
   fullname: string;
-  isAdmin: boolean;
-  new_notification_available: boolean | any; 
+  role: string;
+  new_notification_available: boolean | any;
 };
 
 export type AuthResponse = {

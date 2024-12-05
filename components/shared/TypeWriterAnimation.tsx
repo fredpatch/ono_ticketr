@@ -40,7 +40,7 @@ export const Typewriter = ({ examples }: TypewriterProps) => {
 
   return (
     <p className="mb-2.5 font-semibold uppercase">
-      {/* <span className="inline-block size-2 bg-neutral-950" /> */}
+      <span className="inline-block size-4 bg-neutral-950" />
       <span className="ml-3">
         {examples[exampleIndex].split("").map((l: any, i: any) => {
           return (
@@ -62,7 +62,7 @@ export const Typewriter = ({ examples }: TypewriterProps) => {
                   delay: i * LETTER_DELAY,
                   duration: 0,
                 }}
-                className="text-4xl text-neutral-600"
+                className="text-4xl text-neutral-600 dark:text-neutral-200"
               >
                 {l}
               </motion.span>
@@ -75,7 +75,7 @@ export const Typewriter = ({ examples }: TypewriterProps) => {
                   duration: BOX_FADE_DURATION,
                   ease: "easeInOut",
                 }}
-                className="absolute bottom-[3px] left-[1px] right-0 top-[3px] bg-neutral-950"
+                className="absolute bottom-[3px] left-[1px] right-0 top-[3px] bg-neutral-950 dark:bg-neutral-200"
               />
             </motion.span>
           );

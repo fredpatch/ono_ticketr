@@ -10,8 +10,10 @@ import {
   PencilIcon,
   StarIcon,
 } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+// import { useAuth } from "@/context/AuthContext";
 import { IconHeart } from "@tabler/icons-react";
+import { useAuth } from "@/context/AuthContextV2";
+import { getAuthStore } from "@/store/store";
 
 const EventCard = ({ event }: any) => {
   let router = useRouter();
@@ -23,8 +25,10 @@ const EventCard = ({ event }: any) => {
       personal_info: { username: event_author },
     },
   } = event;
-  let { userAuth } = useAuth();
-  const username = userAuth?.username;
+  // let { userAuth } = useAuth();
+  let { user, access_token } = getAuthStore();
+  // const username = userAuth?.username;
+  const username = user?.username;
 
   const actualDate = Date.now();
   const eventDate = new Date(startDateTime).getTime();
@@ -35,7 +39,7 @@ const EventCard = ({ event }: any) => {
 
   // Ticket status
   const renderTicketStatus = () => {
-    if (!userAuth) return null;
+    if (!access_token) return null;
 
     if (isEventOwner) {
       return (
@@ -45,7 +49,7 @@ const EventCard = ({ event }: any) => {
               e.stopPropagation();
               router.push(`/events/${event_id}/edit`);
             }}
-            className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200 shadow-sm flex items-center justify-center gap-2"
+            className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-400 transition-colors duration-200 shadow-md dark:shadow-white flex items-center justify-center gap-2"
           >
             <PencilIcon className="w-5 h-5" />
             Edit Event
@@ -81,7 +85,7 @@ const EventCard = ({ event }: any) => {
     <>
       <div
         onClick={() => router.push(`/events/${event_id}`)}
-        className={`bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 cursor-pointer overflow-hidden relative hover:opacity-100 ${
+        className={`bg-white rounded-xl shadow-sm hover:shadow-lg dark:shadow-zinc-400 transition-all duration-300 border dark:border-gray-600 border-gray-100 cursor-pointer overflow-hidden relative hover:opacity-100 ${
           isPastEvent ? "opacity-65" : ""
         } "
       }`}

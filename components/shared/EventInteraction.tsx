@@ -4,6 +4,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEventContext } from "@/context/EventContext";
 import { toast } from "@/hooks/use-toast";
+import { getAuthStore } from "@/store/store";
 import { IconBrandTwitter, IconHeart } from "@tabler/icons-react";
 import axios from "axios";
 import Link from "next/link";
@@ -48,9 +49,11 @@ const EventInteraction = () => {
     setIsLikedByUser,
   } = useEventContext();
 
-  let { userAuth } = useAuth();
-  const access_token = userAuth?.access_token;
-  const username = userAuth?.username;
+  // let { userAuth } = useAuth();
+  let {access_token, user} = getAuthStore()
+  // const access_token = userAuth?.access_token;
+  const username = user?.username
+  // const username = userAuth?.username;
 
   useEffect(() => {
     if (access_token) {

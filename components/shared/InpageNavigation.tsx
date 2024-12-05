@@ -58,7 +58,7 @@ const InPageNavigation = ({
   }, [width]);
   return (
     <>
-      <div className="relative bg-white border-b border-grey flex flex-nowrap overflow-x-auto">
+      <div className="relative bg-white dark:bg-zinc-800 border-b border-grey flex flex-nowrap overflow-x-auto">
         {routes?.map((route, i) => {
           return (
             <button
@@ -69,7 +69,9 @@ const InPageNavigation = ({
               }}
               className={
                 "p-4 px-5 capitalize " +
-                (inPageNavIndex === i ? "text-black" : "text-zinc-400 ") +
+                (inPageNavIndex === i
+                  ? "text-black dark:text-white"
+                  : "text-zinc-400 dark:text-zinc-200 ") +
                 (defaultHidden.includes(route) ? " md:hidden" : "")
               }
             >
@@ -80,7 +82,7 @@ const InPageNavigation = ({
 
         <hr
           ref={activeTabLineRef}
-          className="absolute bottom-0 duration-300 border border-zinc-500"
+          className="absolute bottom-0 duration-300 border dark:border-zinc-50 border-zinc-500"
         />
       </div>
       {Array.isArray(children) ? children[inPageNavIndex] : children}

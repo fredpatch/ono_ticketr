@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
+// import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider as AuthProviderV3 } from "@/app/api/AuthProviderV3";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as ToastContainer } from "react-hot-toast";
+import ThemeContextProvider from "@/context/ThemeContext";
+import { AuthProviderV2 } from "@/context/AuthContextV2";
 
 export const metadata: Metadata = {
   title: "ONO",
@@ -17,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
-        <Toaster />
-        <ToastContainer position="bottom-right" />
+        <ThemeContextProvider>
+          <AuthProviderV3>{children}</AuthProviderV3>
+          <Toaster />
+          <ToastContainer position="bottom-right" />
+        </ThemeContextProvider>
       </body>
     </html>
   );

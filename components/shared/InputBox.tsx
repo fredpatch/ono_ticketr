@@ -44,7 +44,11 @@ const InputBox = ({
           className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
           onClick={() => setPasswordShown(!passwordShown)}
         >
-          {passwordShown ? <IconEyeOff size={24} /> : <IconEye size={24} />}
+          {passwordShown ? (
+            <IconEyeOff className="dark:text-zinc-700" size={24} />
+          ) : (
+            <IconEye size={24} className="dark:text-zinc-700" />
+          )}
         </span>
       )}
     </div>

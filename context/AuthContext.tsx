@@ -28,11 +28,13 @@ const defaultState: AuthUser = {
   profile_img: "",
   username: "",
   fullname: "",
-  isAdmin: false,
+  role: "",
   new_notification_available: false,
 };
 
-export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+export const AuthContext = createContext<AuthContextProps | undefined>(
+  undefined
+);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [userAuth, setUserAuth] = useState<AuthUser | null>(defaultState);

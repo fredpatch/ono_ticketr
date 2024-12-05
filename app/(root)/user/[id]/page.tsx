@@ -17,6 +17,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { FilterPaginationData } from "@/common/filter-pagination-data";
 import Image from "next/image";
+import { useAuthV3 } from "@/app/api/AuthProviderV3";
 
 const ServerDomain = process.env.NEXT_PUBLIC_API_URL as string;
 
@@ -73,9 +74,10 @@ const ProfilePage = () => {
     joinedAt,
   } = profile;
 
-  let { userAuth } = useAuth();
-  const username = userAuth?.username;
-  const isAdmin = userAuth?.isAdmin;
+  let { user } = useAuthV3();
+  // const username = userAuth?.username;
+  const username = user?.username;
+  const role = user?.role;
 
   const user_profile = async () => {
     axios
@@ -150,7 +152,7 @@ const ProfilePage = () => {
   return (
     <>
       <AnimationWrapper keyValue="profile-page">
-        {isAdmin && (
+        {role === "admin" && (
           <>
             {loading && <Loader />}
 
@@ -242,7 +244,7 @@ const ProfilePage = () => {
         )}
       </AnimationWrapper>
 
-      {!isAdmin && <NotFound />}
+      {role != "admin" && <NotFound />}
     </>
   );
 };

@@ -1,11 +1,10 @@
 "use client";
 
-import { lookInSession } from "@/common/session";
 import InputBox from "@/components/shared/InputBox";
 import { BlockInTextCard } from "@/components/shared/TypeWriterAnimation";
-import { AuthContext, useAuth } from "@/context/AuthContext";
-import { toast } from "@/hooks/use-toast";
+import { useAuthV3 } from "@/app/api/AuthProviderV3";
 import { googleIcon } from "@/public/imgs";
+import useAuthStore, { getAuthStore } from "@/store/store";
 import { IconAt, IconLock } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,12 +12,14 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const SignInPage = () => {
-  const { signin, userAuth } = useAuth();
+  const { login } = useAuthV3();
+  // const { login, user } = contextValue;
+  const { access_token } = useAuthStore();
   const [formData, setFormData] = React.useState({
     email: "",
     password: "",
   });
-  const access_token = userAuth?.access_token;
+  // const access_token = userAuth?.access_token;
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +29,8 @@ const SignInPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await signin(formData);
+      // await signin(formData);
+      await login(formData);
     } catch (error) {
       console.log(error);
     }
@@ -43,7 +45,7 @@ const SignInPage = () => {
 
   return (
     <>
-      <section className="flex items-center justify-center h-cover">
+      <section className="flex items-center justify-center h-cover bg-white dark:bg-zinc-800">
         {/* Toaster  with a timeout of 3000ms wait the taost to finish then redirect*/}
         <form id="formElement" className="w-full max-w-[600px]">
           <div className="mb-24 text-center capitalize font-gelasio">
@@ -60,7 +62,7 @@ const SignInPage = () => {
           <InputBox
             name="email"
             type="email"
-            icon={<IconAt />}
+            icon={<IconAt className="dark:text-zinc-700" />}
             placeholder="Email"
             onChange={handleChange}
           />
@@ -68,7 +70,7 @@ const SignInPage = () => {
           <InputBox
             name="password"
             type="password"
-            icon={<IconLock />}
+            icon={<IconLock className="dark:text-zinc-700" />}
             placeholder="Password"
             onChange={handleChange}
           />
@@ -97,7 +99,10 @@ const SignInPage = () => {
 
           <p className="mt-6 text-xl text-center text-dark-grey">
             Vous n'avez pas de compte ?
-            <Link href="/signup" className="ml-1 text-xl text-black underline">
+            <Link
+              href="/signup"
+              className="ml-1 text-xl text-black dark:text-zinc-300 underline"
+            >
               Creer un compte
             </Link>
           </p>

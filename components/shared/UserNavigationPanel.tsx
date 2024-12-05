@@ -12,16 +12,19 @@ import {
 import Link from "next/link";
 import { IconFile, IconHome2, IconUser } from "@tabler/icons-react";
 import AnimationWrapper from "./AnimationWrapper";
-import { useAuth } from "@/context/AuthContext";
+import useAuthStore, { getAuthStore } from "@/store/store";
+import { useAuthV3 } from "@/app/api/AuthProviderV3";
 
 interface UserNavigationPanelProps {
   profile_imag: any;
 }
 
 const UserNavigationPanel = ({ profile_imag }: UserNavigationPanelProps) => {
-  const { signout, userAuth } = useAuth();
-  const username = userAuth?.username;
-  const isAdmin = userAuth?.isAdmin;
+  const { logout } = useAuthV3();
+  const { user } = useAuthStore();
+  const username = user?.username;
+  const role = user?.role;
+
   return (
     <AnimationWrapper
       transition={{ duration: 0.2, delay: 0 }}
@@ -44,7 +47,7 @@ const UserNavigationPanel = ({ profile_imag }: UserNavigationPanelProps) => {
           <DropdownMenuSeparator />
 
           {/* Only available admin and creator can create new post */}
-          {isAdmin && (
+          {role === "admin" && (
             <DropdownMenuItem className="w-full">
               <Link
                 href="/editor"
@@ -57,7 +60,7 @@ const UserNavigationPanel = ({ profile_imag }: UserNavigationPanelProps) => {
           )}
 
           {/* Profile view only available for admin and creator */}
-          {isAdmin && (
+          {role === "admin" && (
             <DropdownMenuItem>
               <Link
                 href={`/user/${username}`}
@@ -81,7 +84,7 @@ const UserNavigationPanel = ({ profile_imag }: UserNavigationPanelProps) => {
           <DropdownMenuItem>
             <button
               className="w-full pl-8 font-inter text-left"
-              onClick={signout}
+              onClick={logout}
             >
               <h1 className="m-1 text-lg font-bold">Sign Out</h1>
               <p className="text-gray-400">@{username}</p>

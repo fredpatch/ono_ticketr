@@ -2,8 +2,8 @@
 
 import { FilterPaginationData } from "@/common/filter-pagination-data";
 import { lookInLocal } from "@/common/localeStore";
-import useEventStore from "@/store/store";
-import axios from "axios";
+import apiClient from "@/services/authService";
+import { useEventStore } from "@/store/store";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
@@ -11,7 +11,7 @@ export const fetchLatestEvents = async ({ page = 1 }) => {
   const { events, setEvents } = useEventStore.getState();
 
   try {
-    const { data } = await axios.post(`${API_URL}/events/latest-events`, {
+    const { data } = await apiClient.post(`${API_URL}/events/latest-events`, {
       page,
     });
     const formattedData = await FilterPaginationData({
@@ -30,7 +30,7 @@ export const publishEvent = async (event: any, event_id: string) => {
   const banner_public_id = lookInLocal("fileKey");
 
   try {
-    const response = await axios.post(
+    const response = await apiClient.post(
       `${API_URL}/events/publish-event`,
       { ...event, id: event_id, banner_public_id },
       {
@@ -50,7 +50,7 @@ export const fetchTrendingEvents = async () => {
   const { setTrendingEvents } = useEventStore.getState();
 
   try {
-    const { data } = await axios.get(`${API_URL}/events/trending-events`);
+    const { data } = await apiClient.get(`${API_URL}/events/trending-events`);
     setTrendingEvents(data.events);
   } catch (error) {
     console.log("Error fetching trending events:", error);
@@ -61,7 +61,7 @@ export const fetchEventsByCategory = async (pageState: any, { page = 1 }) => {
   const { events, setEvents } = useEventStore.getState();
 
   try {
-    const { data } = await axios.post(`${API_URL}/events/search-posts`, {
+    const { data } = await apiClient.post(`${API_URL}/events/search-posts`, {
       tag: pageState,
       page,
     });

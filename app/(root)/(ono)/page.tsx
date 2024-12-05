@@ -1,24 +1,23 @@
 "use client";
 
+/* Native Imports */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
 
+/* Custom Imports */
 import AnimationWrapper from "@/components/shared/AnimationWrapper";
 import InPageNavigation, {
   activeTabRef,
 } from "@/components/shared/InpageNavigation";
 import Loader from "@/components/shared/Loader";
 import NoDataMessage from "@/components/shared/NoDataMessage";
-import React, { useEffect, useState } from "react";
 import MinimalEventPost from "@/components/shared/MinimalEventPost";
-import {
-  eventsByCategory,
-  latest_events,
-  trending_events,
-} from "@/services/dataServices";
 import { LoadMoreDataBtn } from "@/components/shared/LoadMoreDataBtn";
 import EventCard from "@/components/shared/EventCard";
-import useEventStore from "@/store/store";
+import { useEventStore, getAuthStore } from "@/store/store";
+
+/* Hooks [zustand]*/
 import {
   fetchEventsByCategory,
   fetchLatestEvents,
@@ -39,7 +38,11 @@ const HomePage = () => {
   const { events, setEvents, trendingEvents, loading, setLoading } =
     useEventStore();
 
+  // let { user, access_token } = getAuthStore();
+  // console.log(`@@@ USER && ACCESS TOKEN =>`, user, access_token);
+
   useEffect(() => {
+    setEvents(null);
     // set inPageIndex
     activeTabRef.current?.click();
 
@@ -72,21 +75,19 @@ const HomePage = () => {
     setLoading(false);
   };
 
-  const upcomingEvents =
-    events?.results.filter((event: any) => {
-      return new Date(event.startDateTime) > new Date();
-    }) || [];
+  const upcomingEvents = events?.results.filter((event: any) => {
+    return new Date(event.startDateTime) > new Date();
+  });
 
-  const pastEvents =
-    events?.results.filter((event: any) => {
-      return new Date(event.startDateTime) < new Date();
-    }) || [];
+  const pastEvents = events?.results.filter((event: any) => {
+    return new Date(event.startDateTime) < new Date();
+  });
 
   // console.log("@@@ Upcoming Events ==> ", upcomingEvents);
   // console.log("@@@ Past Events ==> ", pastEvents);
 
   return (
-    <div className="">
+    <div>
       <AnimationWrapper>
         <section className="h-cover flex gap-5">
           {/* Latest Events */}

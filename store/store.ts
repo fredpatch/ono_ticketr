@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { signin, signout, signup } from "../services/authService";
 
 interface Events {
   results: EventItem[];
@@ -29,7 +30,7 @@ interface EventState {
   setLoading: (loading: boolean) => void;
 }
 
-const useEventStore = create<EventState>()(
+export const useEventStore = create<EventState>()(
   devtools((set) => ({
     events: null,
     trendingEvents: null,
@@ -46,4 +47,31 @@ const useEventStore = create<EventState>()(
   }))
 );
 
-export default useEventStore;
+interface AuthState {
+  user: {
+    username: string;
+    fullname: string;
+    role: string;
+    profile_img: string;
+    new_notification_available: boolean;
+  } | null;
+  loading: boolean;
+  access_token: any | null;
+  setAuth: (user: any, access_token: string) => void;
+  setAccessToken: (access_token: any) => void;
+  setLoading: (loading: boolean) => void;
+  logout: () => void;
+}
+
+const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  access_token: null,
+  loading: false,
+  setAuth: (user, access_token) => set({ user, access_token }),
+  setAccessToken: (access_token) => set({ access_token }),
+  setLoading: (loading) => set({ loading }),
+  logout: () => set({ user: null, access_token: null }),
+}));
+
+export const getAuthStore = () => useAuthStore.getState();
+export default useAuthStore;
